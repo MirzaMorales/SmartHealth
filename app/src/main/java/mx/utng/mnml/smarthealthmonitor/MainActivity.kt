@@ -1,0 +1,68 @@
+package mx.utng.mnml.smarthealthmonitor
+
+import android.content.res.Configuration
+import android.os.Bundle
+import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import mx.utng.mnml.smarthealthmonitor.ui.theme.SmartHealthMonitorTheme
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // Un solo setContent que contiene tu jerarquía visual
+        setContent {
+            SmartHealthMonitorTheme {
+                Surface(modifier = Modifier.fillMaxSize()) {
+                    LoginScreen(
+                        onLoginSuccess = {
+                            // TODO sesión 5: navegar al Dashboard
+                            Log.d("SmartHealth", "Login exitoso")
+                        }
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Preview(
+    name = "Login - Light",
+    showBackground = true,
+    showSystemUi = true,
+    device = "id:pixel_6"
+)
+@Preview(
+    name = "Login - Dark",
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Preview(
+    name = "Login - Big Font",
+    showBackground = true,
+    fontScale = 1.5f
+)
+
+@Composable
+fun ThemePreview() {
+    SmartHealthMonitorTheme {
+        Surface(modifier = Modifier.fillMaxSize()) {
+            Text(
+                text = "SmartHealth Monitor",
+                style = MaterialTheme.typography.headlineMedium,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.padding(24.dp)
+            )
+        }
+    }
+}
