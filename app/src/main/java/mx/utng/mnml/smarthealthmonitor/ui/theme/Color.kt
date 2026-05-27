@@ -2,7 +2,7 @@ package mx.utng.mnml.smarthealthmonitor.ui.theme
 import androidx.compose.ui.graphics.Color
 
 // Light scheme
-val SHPrimary = Color(0xFF1B4F8A)
+val SHPrimary = Color(0xFF99AD7A)
 val SHOnPrimary = Color(0xFFFFFFFF)
 val SHPrimaryContainer = Color(0xFFD6E4F7)
 val SHSecondary = Color(0xFF0D7377)
@@ -12,7 +12,7 @@ val SHSurface = Color(0xFFFFFFFF)
 val SHOnSurface = Color(0xFF1C1B1F)
 
 // Dark scheme
-val SHPrimaryDark = Color(0xFF9EC3F5)
+val SHPrimaryDark = Color(0xFF546B41)
 val SHOnPrimaryDark = Color(0xFF00305E)
 val SHBackgroundDark = Color(0xFF1C1B1F)
 val SHSurfaceDark = Color(0xFF2B2930)

@@ -14,55 +14,56 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import mx.utng.mnml.smarthealthmonitor.navigation.SmartHealthNavGraph
 import mx.utng.mnml.smarthealthmonitor.ui.theme.SmartHealthMonitorTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // Un solo setContent que contiene tu jerarquía visual
         setContent {
-            SmartHealthMonitorTheme {
-                Surface(modifier = Modifier.fillMaxSize()) {
-                    LoginScreen(
-                        onLoginSuccess = {
-                            // TODO sesión 5: navegar al Dashboard
-                            Log.d("SmartHealth", "Login exitoso")
-                        }
-                    )
-                }
+            //SmartHealthMonitorTheme {
+                //Surface(modifier = Modifier.fillMaxSize()) {
+                    //LoginScreen(
+                        //onLoginSuccess = {
+                            //Log.d("SmartHealth", "Login exitoso")
+                        //}
+                    //)
+                //}
+            //}
+            SmartHealthNavGraph()
+        }
+    }
+
+    @Preview(showBackground = true, name = "Light")
+    @Preview(
+        showBackground = true,
+        name = "Dark",
+        uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES
+    )
+    @Preview(name = "Login - Light", showBackground = true,
+        showSystemUi = true, device = "id:pixel_6")
+    @Preview(name = "Login - Dark", showBackground = true,
+        uiMode = android.content.res.Configuration.UI_MODE_NIGHT_YES)
+    @Preview(name = "Login - Big Font", showBackground = true,
+        fontScale = 1.5f)
+    @Composable
+    private fun LoginScreenPreview() {
+        SmartHealthMonitorTheme {
+            LoginScreen()
+        }
+    }
+    @Composable
+    fun ThemePreview() {
+        SmartHealthMonitorTheme {
+            Surface(modifier = Modifier.fillMaxSize()) {
+                Text(
+                    text = "SmartHealth Monitor",
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(24.dp)
+                )
             }
         }
     }
-}
 
-@Preview(
-    name = "Login - Light",
-    showBackground = true,
-    showSystemUi = true,
-    device = "id:pixel_6"
-)
-@Preview(
-    name = "Login - Dark",
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
-)
-@Preview(
-    name = "Login - Big Font",
-    showBackground = true,
-    fontScale = 1.5f
-)
-
-@Composable
-fun ThemePreview() {
-    SmartHealthMonitorTheme {
-        Surface(modifier = Modifier.fillMaxSize()) {
-            Text(
-                text = "SmartHealth Monitor",
-                style = MaterialTheme.typography.headlineMedium,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(24.dp)
-            )
-        }
-    }
 }
