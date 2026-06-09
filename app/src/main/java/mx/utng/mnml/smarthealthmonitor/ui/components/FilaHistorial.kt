@@ -12,11 +12,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import mx.utng.mnml.smarthealthmonitor.data.models.LecturaFC
 
 @Composable
 fun FilaHistorial(
-    lectura: LecturaFC,
+    lectura: mx.utng.mnml.smarthealthmonitor.data.db.LecturaFC,
     modifier: Modifier = Modifier
 ) {
     Row(
