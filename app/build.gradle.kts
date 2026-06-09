@@ -58,10 +58,11 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     debugImplementation(libs.androidx.compose.ui.tooling)
+    implementation("com.google.android.gms:play-services-wearable:20.0.1")
     implementation("androidx.compose.material:material-icons-extended")
 
     // Room
-    val roomVersion = "2.6.1"
+    val roomVersion = "2.8.0"
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
 
