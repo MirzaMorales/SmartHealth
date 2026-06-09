@@ -46,6 +46,34 @@ https://drive.google.com/file/d/1k38ShlZ7sOqRW5ZWI2rTizMcFo7BNtbS/view
 3.	Verificar que los valores de FC y Pasos cambian en tiempo real.
 
 
+# 2.3 Health Services API + Room DB: Datos reales del sensor + Historial persistente
+
+<img width="601" height="786" alt="image" src="https://github.com/user-attachments/assets/9ce664b4-9ac1-431a-a32a-cd8893d99689" />
+
+*Video de Funcionalidad*
+https://drive.google.com/file/u/0/d/16zWDpobaHUmow-x6LzFRDfGXnf9QIfGU/view?usp=classroom_web
+
+## ¿Qué hace este PR?
+Integra Health Services API para lectura real del sensor FC del wearable.
+Agrega Room DB para persistir el historial de lecturas. Conecta HistorialScreen con Room vía StateFlow reactivo.
+ 
+## Archivos creados/modificados
+-	[x] wear/.../HealthDataService.kt — PassiveMonitoringClient
+-	[x] data/db/LecturaFC.kt — @Entity Room
+-	[x] data/db/LecturaFCDao.kt — @Dao con Flow
+-	[x] data/db/SmartHealthDB.kt — @Database singleton
+-	[x] data/SmartHealthRepository.kt — actualizado con Room
+-	[x] ui/viewmodel/DashboardViewModel.kt — historial desde Room
+-	[x] ui/screens/HistorialScreen.kt — completo con estado vacío
+-	[x] navigation/NavGraph.kt — HistorialScreen real
+ 
+## Cómo probar 1. Emulador Wear OS → Extended Controls → Health Services → mover slider FC.
+2.	Verificar que Dashboard muestra el valor del slider en tiempo real.
+3.	Abrir Historial: lecturas deben aparecer en orden descendente.
+4.	FC > 100 debe aparecer en rojo.
+5.	Cerrar y reabrir la app: historial debe persistir.
+
+
 
 ## Autor
 Mirza Morales — UTNG — natzllyunigmail.com
