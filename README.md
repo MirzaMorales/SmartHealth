@@ -75,7 +75,7 @@ Agrega Room DB para persistir el historial de lecturas. Conecta HistorialScreen 
 
 # 2.4 AlertaScreen
 
-<img width="1080" height="2400" alt="image" src="https://github.com/user-attachments/assets/4d846858-b3d3-4db1-90d9-cb11630ee92e" />
+<img width="601" height="789" alt="image" src="https://github.com/user-attachments/assets/4d846858-b3d3-4db1-90d9-cb11630ee92e" />
 
 *Video de funcionalidad*
 https://drive.google.com/file/u/0/d/17WXRIVNLOHMSAvFKayQQFp1Btgt4qZjb/view?usp=classroom_web
