@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -41,6 +40,10 @@ import mx.utng.mnml.smarthealthmonitor.ui.components.FilaHistorial
 import mx.utng.mnml.smarthealthmonitor.ui.components.TarjetaDato
 import mx.utng.mnml.smarthealthmonitor.ui.theme.SmartHealthMonitorTheme
 import mx.utng.mnml.smarthealthmonitor.ui.viewmodel.DashboardViewModel
+import androidx.compose.foundation.lazy.items
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,7 +54,7 @@ fun DashboardScreen(
     // collectAsState() convierte StateFlow en State de Compose
     val fc by viewModel.fc.collectAsState()
     val pasos by viewModel.pasos.collectAsState()
-    val historial = viewModel.historial
+    val historial by viewModel.historial.collectAsState(initial = emptyList())
 
     // ── Estado del diálogo y Snackbar ──────────────────────
     var mostrarAlerta by remember { mutableStateOf(false) }
@@ -160,9 +163,12 @@ fun DashboardScreen(
                 item {
                     OutlinedButton(
                         onClick = {
-                            // Simular lectura del wearable
                             val fcSimulado = (60..110).random()
-                            SmartHealthRepository.actualizarFC(fcSimulado)
+
+                            CoroutineScope(Dispatchers.IO).launch {
+                                SmartHealthRepository.actualizarFC(fcSimulado)
+                            }
+
                             SmartHealthRepository.actualizarPasos((3000..8000).random())
                         },
                         modifier = Modifier.fillMaxWidth()
