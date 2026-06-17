@@ -131,8 +131,10 @@ Implementa la interfaz nativa para Wear OS utilizando Jetpack Compose for Wear O
 5. **Sincronización Multidispositivo:** Cada cambio de pulso leído en tiempo real por el reloj es enviado automáticamente y se actualiza de inmediato en la aplicación móvil del celular.
 
 # 2.6 Wear OS Avanzado: Rotary Input · SwipeToDismiss · WatchFace
-<img width="547" height="577" alt="Captura de pantalla 2026-06-17 122200" src="https://github.com/user-attachments/assets/177614b4-ac04-4ad0-81d9-87e70b6cc915" />
-<img width="576" height="652" alt="Captura de pantalla 2026-06-17 134137" src="https://github.com/user-attachments/assets/c1488986-37da-4d9a-92f9-59fa569c95e7" />
+<img width="547" height="577" alt="Captura de pantalla 2026-06-17 122200" src="https://github.com/user-attachments/assets/177614b4-ac04-4ad0-81d9-87e70b6cc915" /> <img width="576" height="652" alt="Captura de pantalla 2026-06-17 134137" src="https://github.com/user-attachments/assets/c1488986-37da-4d9a-92f9-59fa569c95e7" />
+
+*Videos de funcionalidad*
+https://drive.google.com/file/d/1vmv_JOOfmyD-tnOoXHID2std3H-_Ymyj/view
 
 ## ¿Qué hace este PR?
 Implementa una esfera de reloj inteligente (Watch Face) interactiva nativa utilizando la API Jetpack WatchFace con CanvasRenderer, e integra una pantalla de historial de frecuencia cardíaca (WearHistorialScreen) que soporta entrada física rotatoria (corona/bisel del reloj) a través de .rotaryScrollable de Wear Compose y Google Horologist. Consume las lecturas de frecuencia cardíaca del sensor del dispositivo en tiempo real directamente en la esfera del reloj y consulta la base de datos local compartida (Room DB a través del repositorio :shared) para listar y resaltar visualmente las lecturas históricas según su rango.
