@@ -73,8 +73,6 @@ dependencies {
     implementation("com.google.android.horologist:horologist-compose-layout:0.6.17")
     implementation("com.google.android.horologist:horologist-compose-material:0.6.17")
 
-    // Compartir Repository con el modulo app
-    // NOTA: No puedes depender de ':app' directamente porque es un modulo de aplicacion.
-    // Debes crear un modulo 'library' para compartir codigo entre ':app' y ':wear'.
-    // implementation(project(":app"))
+    // Compartir Repository con el modulo app a traves de shared
+    implementation(project(":shared"))
 }
