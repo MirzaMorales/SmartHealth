@@ -98,6 +98,39 @@ Completa la Unidad I de SmartHealth Monitor con:
 4.	Confirmar → Dialog cierra + Snackbar de confirmación.
 5.	Cerrar y reabrir la app: historial persiste.
 
+# 2.5 Compose for Wear OS: Interfaz nativa del reloj inteligente
+
+<img width="792" height="1032" alt="Captura de pantalla 2026-06-16 232610" src="https://github.com/user-attachments/assets/97677cbe-1d33-4496-bded-423cfa5d80a5" />
+<img width="1918" height="1012" alt="Captura de pantalla 2026-06-16 231153" src="https://github.com/user-attachments/assets/d6b1db15-8f57-419e-acb9-eda3e73fc23c" />
+
+
+*Videos de funcionalidad*
+https://drive.google.com/file/u/0/d/19MOh1hCPmD-NUJcqexHBoFNW6APgLDc5/view?usp=classroom_web
+https://drive.google.com/file/d/1gCU5L1YutDQ9KtgYWfoDGr5wcdxigSzH/view
+
+## ¿Qué hace este PR?
+Implementa la interfaz nativa para Wear OS utilizando Jetpack Compose for Wear OS y Google Horologist. Integra la navegación gestual circular optimizada para relojes (deslizar para salir), lectura inmediata y en tiempo real del sensor de frecuencia cardíaca (FC) usando el `SensorManager` del dispositivo (emulador) para sincronizar los cambios de pulso al instante con la app del celular, y una pantalla de confirmación interactiva para enviar alertas médicas.
+
+## Archivos creados/modificados
+- [x] wear/src/main/AndroidManifest.xml — Declaración de permisos de salud, sensores y componentes de la aplicación.
+- [x] wear/build.gradle.kts — Dependencias de Compose for Wear OS, Horologist, iconos y módulo shared.
+- [x] wear/.../presentation/WearMainActivity.kt — Petición de permisos dinámicos en ejecución e inicialización del SensorManager para actualizaciones inmediatas.
+- [x] wear/.../presentation/WearDashboardScreen.kt — Pantalla principal del reloj con Scaffold circular, indicador de posición y lista deslizable.
+- [x] wear/.../presentation/WearDashboardViewModel.kt — Conector que expone la frecuencia cardíaca en tiempo real desde el repositorio.
+- [x] wear/.../presentation/WearAlertaScreen.kt — Interfaz de confirmación de alertas con botones rápidos de Confirmar/Cancelar.
+- [x] wear/.../presentation/WearNavGraph.kt — Controlador de navegación mediante `SwipeDismissableNavHost`.
+- [x] wear/.../presentation/components/WearFCCard.kt — Tarjeta reutilizable que dibuja el pulso (BPM) en tiempo real con colores dinámicos (color de error si está fuera de rango).
+- [x] wear/.../presentation/theme/WearTheme.kt — Tema base circular adaptado a Material Design en relojes.
+- [x] settings.gradle.kts — Registro e inclusión del módulo de código compartido `:shared`.
+
+## Flujo completo verificado
+1. **Petición de Permisos:** Al abrir por primera vez la aplicación en el Wear OS, solicita los permisos de sensores (`BODY_SENSORS`), reconocimiento de actividad y salud.
+2. **Dashboard en tiempo real:** Tras otorgar los permisos, carga el Dashboard mostrando la hora actual, la tarjeta de FC y el botón de Alerta.
+3. **Simulador de Pulso:** Modificar la frecuencia cardíaca desde los *Virtual Sensors* (pestaña Heart Rate) del emulador actualiza la tarjeta de pulso instantáneamente en la pantalla del reloj.
+4. **Alerta y Navegación Circular:** Presionar "Alerta" abre la pantalla de confirmación. Deslizar hacia la derecha (swipe right) regresa suavemente al Dashboard gracias a `SwipeDismissableNavHost`.
+5. **Sincronización Multidispositivo:** Cada cambio de pulso leído en tiempo real por el reloj es enviado automáticamente y se actualiza de inmediato en la aplicación móvil del celular.
+
+
 
 ## Autor
 Mirza Morales — UTNG — natzllyunigmail.com

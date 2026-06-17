@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp") version "2.2.10-2.0.2"
 }
 
 android {
@@ -50,6 +51,7 @@ dependencies {
     implementation(libs.androidx.wear.tooling.preview)
     implementation(libs.compose.material3)
     implementation(libs.compose.ui.tooling)
+    implementation("androidx.compose.material:material-icons-core")
     implementation(libs.play.services.wearable)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
@@ -58,8 +60,20 @@ dependencies {
 
     // Health Services API
     implementation("androidx.health:health-services-client:1.1.0-alpha03")
-    // Coroutines await() para Guava ListenableFuture     implementation("com.google.guava:guava:33.0.0-android")
+    // Coroutines await() para Guava ListenableFuture
+    implementation("com.google.guava:guava:33.0.0-android")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-guava:1.11.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.8.0")
 
+    // Compose for Wear OS
+    implementation("androidx.wear.compose:compose-material:1.3.1")
+    implementation("androidx.wear.compose:compose-foundation:1.3.1")
+    implementation("androidx.wear.compose:compose-navigation:1.3.1")
+
+    // Horologist (utilidades Wear OS de Google)
+    implementation("com.google.android.horologist:horologist-compose-layout:0.6.17")
+    implementation("com.google.android.horologist:horologist-compose-material:0.6.17")
+
+    // Compartir Repository con el modulo app a traves de shared
+    implementation(project(":shared"))
 }

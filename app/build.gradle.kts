@@ -69,4 +69,6 @@ dependencies {
     // Necesario para generar el código del DAO
     ksp("androidx.room:room-compiler:$roomVersion")
 
+    // Dependencia del modulo compartido
+    implementation(project(":shared"))
 }
