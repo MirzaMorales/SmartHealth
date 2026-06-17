@@ -51,8 +51,8 @@ class WearMainActivity : ComponentActivity(), SensorEventListener {
 
         setContent {
             SmartHealthWearTheme {
-                // TODO Ej.02: reemplazar con WearNavGraph
-                WearDashboardScreen()
+                // Reemplazado con WearNavGraph
+                SmartHealthWearNavGraph()
             }
         }
     }
