@@ -25,6 +25,7 @@ class WearMainActivity : ComponentActivity(), SensorEventListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
         // Inicializar el repositorio compartido en el módulo wear
         SmartHealthRepository.init(applicationContext)
 
