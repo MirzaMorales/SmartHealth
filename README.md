@@ -130,7 +130,35 @@ Implementa la interfaz nativa para Wear OS utilizando Jetpack Compose for Wear O
 4. **Alerta y Navegación Circular:** Presionar "Alerta" abre la pantalla de confirmación. Deslizar hacia la derecha (swipe right) regresa suavemente al Dashboard gracias a `SwipeDismissableNavHost`.
 5. **Sincronización Multidispositivo:** Cada cambio de pulso leído en tiempo real por el reloj es enviado automáticamente y se actualiza de inmediato en la aplicación móvil del celular.
 
+# 2.6 Wear OS Avanzado: Rotary Input · SwipeToDismiss · WatchFace
+<img width="547" height="577" alt="Captura de pantalla 2026-06-17 122200" src="https://github.com/user-attachments/assets/177614b4-ac04-4ad0-81d9-87e70b6cc915" /> <img width="576" height="652" alt="Captura de pantalla 2026-06-17 134137" src="https://github.com/user-attachments/assets/c1488986-37da-4d9a-92f9-59fa569c95e7" />
 
+*Videos de funcionalidad*
+https://drive.google.com/file/d/1vmv_JOOfmyD-tnOoXHID2std3H-_Ymyj/view
+
+## ¿Qué hace este PR?
+Implementa una esfera de reloj inteligente (Watch Face) interactiva nativa utilizando la API Jetpack WatchFace con CanvasRenderer, e integra una pantalla de historial de frecuencia cardíaca (WearHistorialScreen) que soporta entrada física rotatoria (corona/bisel del reloj) a través de .rotaryScrollable de Wear Compose y Google Horologist. Consume las lecturas de frecuencia cardíaca del sensor del dispositivo en tiempo real directamente en la esfera del reloj y consulta la base de datos local compartida (Room DB a través del repositorio :shared) para listar y resaltar visualmente las lecturas históricas según su rango.
+
+## Archivos creados/modificados
+- [x] wear/build.gradle.kts — Dependencias de Jetpack WatchFace API (watchface, watchface-style) y plugin de KSP.
+- [x] wear/src/main/AndroidManifest.xml — Registro del servicio de la esfera de reloj (SmartHealthWatchFaceService) con los permisos correspondientes.
+- [x] wear/src/main/res/xml/watch_face.xml — Recurso XML de la esfera de reloj y definición del thumbnail de vista previa.
+- [x] wear/src/main/res/drawable/preview_digital.png — Miniatura de vista previa de la esfera del reloj digital en los ajustes.
+- [x] wear/.../watchface/SmartHealthWatchFaceService.kt — Servicio para inicializar la esfera del reloj digital e instanciar el renderer.
+- [x] wear/.../watchface/SmartHealthRenderer.kt — Motor CanvasRenderer que escucha al sensor de ritmo cardíaco en tiempo real y dibuja la hora y el pulso sobre fondo optimizado.
+- [x] wear/.../presentation/WearDashboardScreen.kt — Inclusión del botón (Chip) para acceder a la nueva pantalla de Historial.
+- [x] wear/.../presentation/WearDashboardViewModel.kt — Exposición del flujo de datos de historial obtenidos del repositorio compartido.
+- [x] wear/.../presentation/WearNavGraph.kt — Controlador de navegación con soporte para la pantalla de historial en el host circular.
+- [x] wear/.../presentation/WearHistorialScreen.kt — Pantalla de historial con lista deslizable y soporte para desplazamiento por corona física/rotatoria.
+- [x] wear/.../presentation/components/WearFilaHistorial.kt — Fila/tarjeta del historial con color de pulso dinámico (color de error si está fuera de rango).
+
+## Flujo completo verificado
+1. **Configuración de Esfera de Reloj (Watch Face):** Al cambiar la esfera del reloj en el emulador o reloj inteligente Wear OS, aparece "SmartHealth Watch Face" con su respectiva vista previa (preview_digital.png). Al seleccionarla, comienza a mostrar de forma activa la hora, los segundos y las pulsaciones actuales.
+2. **Monitoreo en Esfera de Reloj en Segundo Plano:** El renderizador de la esfera del reloj registra dinámicamente un listener del sensor de ritmo cardíaco. Cada cambio del pulso desde los sensores virtuales actualiza instantáneamente el Canvas y persiste los datos en el repositorio compartido sin necesidad de que la aplicación principal esté abierta.
+3. **Navegación al Historial:** En la aplicación principal, el Dashboard ahora cuenta con un botón "Historial". Al presionarlo, navega a la pantalla WearHistorialScreen cargando la lista de registros históricos en orden cronológico.
+4. **Desplazamiento Rotatorio (Rotary Input):** El usuario puede navegar de manera fluida a lo largo del historial de lecturas usando la corona física o el bisel táctil del dispositivo gracias a la integración del modificador .rotaryScrollable.
+5. **Resaltado Visual de Alertas:** Las lecturas almacenadas en la base de datos se clasifican automáticamente en base a si el pulso es normal o anómalo. El historial visualiza de inmediato la lectura anómala pintando el pulso en color rojo (Error Theme) y las lecturas normales en color verde/azul del tema principal.
+6. **Navegación Circular:** Deslizar de izquierda a derecha (Swipe to dismiss) en la pantalla de historial regresa suavemente al Dashboard gracias al comportamiento del SwipeDismissableNavHost.
 
 ## Autor
 Mirza Morales — UTNG — natzllyunigmail.com
