@@ -76,4 +76,9 @@ dependencies {
 
     // Compartir Repository con el modulo app a traves de shared
     implementation(project(":shared"))
+
+    // Jetpack WatchFace API
+    implementation("androidx.wear.watchface:watchface:1.2.1")
+    implementation("androidx.wear.watchface:watchface-complications-rendering:1.2.1")
+    implementation("androidx.wear.watchface:watchface-style:1.2.1")
 }
