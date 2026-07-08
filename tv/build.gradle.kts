@@ -49,6 +49,7 @@ dependencies {
     // ViewModel + Coroutines
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
+    implementation("androidx.fragment:fragment-ktx:1.8.5")
 
     // Compose Runtime necesario para satisfacer el plugin de Kotlin del proyecto
     implementation(platform(libs.androidx.compose.bom))
