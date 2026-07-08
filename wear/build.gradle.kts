@@ -6,16 +6,12 @@ plugins {
 
 android {
     namespace = "mx.utng.mnml.wear"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "mx.utng.mnml.wear"
         minSdk = 30
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 

@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "mx.utng.smarthealthmonitor.tv"
-    compileSdk = 36
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "mx.utng.smarthealthmonitor.tv"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
     }
