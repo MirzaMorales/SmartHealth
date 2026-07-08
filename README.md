@@ -160,6 +160,48 @@ Implementa una esfera de reloj inteligente (Watch Face) interactiva nativa utili
 5. **Resaltado Visual de Alertas:** Las lecturas almacenadas en la base de datos se clasifican automáticamente en base a si el pulso es normal o anómalo. El historial visualiza de inmediato la lectura anómala pintando el pulso en color rojo (Error Theme) y las lecturas normales en color verde/azul del tema principal.
 6. **Navegación Circular:** Deslizar de izquierda a derecha (Swipe to dismiss) en la pantalla de historial regresa suavemente al Dashboard gracias al comportamiento del SwipeDismissableNavHost.
 
+# 3.3 Cast SDK + Remote Playback Integración final Unidad III
+<img width="296" height="625" alt="image" src="https://github.com/user-attachments/assets/6ab5b3b8-ff47-4850-966b-3371c8bcf4ed" />
+
+*Videos de funcionalidad*
+https://drive.google.com/file/d/1JKyutdoxjYKZYsUPXvUaHf-FHNA3GsD8/view
+
+## ¿Qué hace este PR?
+Implementa la pantalla de detalles de lecturas de frecuencia cardíaca (DetailFragment) y la reproducción multimedia de alertas (PlaybackFragment con Jetpack Media3/ExoPlayer) en Android TV. Asimismo, integra el SDK de Google Cast en la aplicación móvil, añadiendo el botón de transmisión (MediaRouteButton) en el Dashboard y la infraestructura de comunicación (CastManager) para enviar actualizaciones del pulso en tiempo real desde el reloj (Wear OS) y reproducir alertas de audio de forma remota en la televisión.
+
+## Archivos creados/modificados
+
+### Compartido (Data & Room DB)
+- [x] shared/src/main/java/.../db/LecturaFCDao.kt — Agregada la consulta obtenerPorId para recuperar lecturas individuales de la base de datos local.
+
+### Android TV UI & Reproducción (Módulo :tv)
+- [x] tv/build.gradle.kts — Agregadas dependencias de Room Runtime, Jetpack Media3 (ExoPlayer y UI), el adaptador oficial media3-ui-leanback y soporte de preferencias.
+- [x] tv/src/main/AndroidManifest.xml — Añadido el permiso de internet para habilitar la transmisión de audio web.
+- [x] tv/src/main/.../DetailsDescriptionPresenter.kt — Creado el presentador para formatear y mapear el pulso (bpm), estado y timestamp en el detalle.
+- [x] tv/src/main/.../DetailFragment.kt — Creado el fragmento de detalles heredando de DetailsSupportFragment con soporte de botones de acción y control de clics.
+- [x] tv/src/main/.../MainFragment.kt — Conectado el evento setOnItemViewClickedListener para navegar del historial al detalle al hacer clic en una tarjeta.
+- [x] tv/src/main/.../PlaybackFragment.kt — Creado el fragmento de reproducción de audio con ExoPlayer y PlaybackTransportControlGlue para control nativo con D-pad.
+
+### Google Cast & App Móvil (Módulo :app)
+- [x] app/build.gradle.kts — Incorporadas dependencias de Cast Framework, MediaRouter y dependencias de compatibilidad.
+- [x] app/src/main/AndroidManifest.xml — Registrada la metadata de inicialización para SmartHealthCastOptionsProvider.
+- [x] app/src/main/res/values/themes.xml — Cambiado el tema padre a Theme.AppCompat.DayNight.NoActionBar y definidos los atributos de color primarios para evitar fallas de contraste en el botón de Cast.
+- [x] app/src/main/.../MainActivity.kt — Cambiada la herencia de MainActivity a FragmentActivity para dar soporte al inflador de diálogos del botón de Cast.
+- [x] app/src/main/.../SmartHealthApp.kt — Inicializado CastContext de manera segura con try-catch para prevenir crashes en emuladores sin servicios de Google.
+- [x] app/src/main/.../SmartHealthCastOptionsProvider.kt — Creado el proveedor de opciones de Cast configurando el ID del receptor por defecto de Google.
+- [x] app/src/main/.../cast/CastManager.kt — Creado el gestor singleton para enviar mensajes de latidos en tiempo real por el canal personalizado y controlar la reproducción remota.
+- [x] app/src/main/.../ui/screens/DashboardScreen.kt — Integrado el MediaRouteButton en la barra superior usando AndroidView y ContextThemeWrapper para evitar el crash de contraste translúcido.
+- [x] app/src/main/.../ui/screens/AlertaScreen.kt — Añadida lógica para iniciar el streaming de la alerta de audio en la TV si hay sesión de Cast activa al confirmar.
+- [x] app/src/main/.../data/service/WearListenerService.kt — Conectado el servicio en segundo plano para transmitir cada latido recibido de Wear OS directamente al canal de Cast en tiempo real.
+
+## Flujo completo verificado
+
+1. **Flujo de Pantalla de Detalle y Reproducción en la TV:** Al seleccionar cualquier lectura en el historial del BrowseFragment, se navega correctamente al DetailFragment, el cual mapea los datos de Room de forma correcta. Al hacer clic en "▶ Reproducir alerta", inicia la reproducción de audio en pantalla completa usando ExoPlayer, sincronizado con las teclas del control remoto (D-pad), y deteniendo de forma limpia el hilo de audio al presionar volver.
+2. **Botón de Transmisión (CastButton) en la Barra Superior:** En el Dashboard de la app móvil se visualiza el icono de Cast. Gracias al ContextThemeWrapper y al cambio de tema base en la actividad, el botón se despliega de forma segura sin crasheos de contraste y de manera responsiva al estado de la conexión en red.
+3. **Sincronización en segundo plano con el Receptor de TV:** Al recibir actualizaciones de latidos desde el reloj inteligente mediante WearListenerService, la app móvil verifica y envía los datos mediante un socket de Cast hacia el canal de transmisión de forma transparente.
+
+
+
 ## Autor
 Mirza Morales — UTNG — natzllyunigmail.com
 

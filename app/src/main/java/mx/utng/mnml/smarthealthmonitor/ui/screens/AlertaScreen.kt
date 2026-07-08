@@ -47,9 +47,17 @@ fun AlertaScreen(
             }
         },
         confirmButton = {
+            val ctx = androidx.compose.ui.platform.LocalContext.current
             Button(
                 onClick = {
                     enviando = true
+                    if (mx.utng.mnml.smarthealthmonitor.cast.CastManager.isConnected(ctx)) {
+                        mx.utng.mnml.smarthealthmonitor.cast.CastManager.reproducirEnTV(
+                            context = ctx,
+                            url     = "https://your-server.com/alerta_$fc.mp3",
+                            titulo  = "⚠ Alerta FC $fc bpm"
+                        )
+                    }
                     onConfirmar()
                 },
                 enabled = !enviando,

@@ -3,7 +3,7 @@ package mx.utng.mnml.smarthealthmonitor
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
-import androidx.activity.ComponentActivity
+import androidx.fragment.app.FragmentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.dp
 import mx.utng.mnml.smarthealthmonitor.navigation.SmartHealthNavGraph
 import mx.utng.mnml.smarthealthmonitor.ui.theme.SmartHealthMonitorTheme
 
-class MainActivity : ComponentActivity() {
+class MainActivity : FragmentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {

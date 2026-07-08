@@ -29,6 +29,7 @@ class WearListenerService : WearableListenerService() {
                 CoroutineScope(Dispatchers.IO).launch {
                     SmartHealthRepository.actualizarFC(bpm)
                 }
+                mx.utng.mnml.smarthealthmonitor.cast.CastManager.enviarFC(applicationContext, bpm)
             }
 
             PATH_PASOS -> {
