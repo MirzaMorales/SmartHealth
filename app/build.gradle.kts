@@ -67,4 +67,9 @@ dependencies {
 
     // Dependencia del modulo compartido
     implementation(project(":shared"))
+
+    // MediaRouter — el UI del botón de Cast
+    implementation("androidx.mediarouter:mediarouter:1.7.0")
+    // Cast Framework — el protocolo de comunicación
+    implementation("com.google.android.gms:play-services-cast-framework:21.5.0")
 }

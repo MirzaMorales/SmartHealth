@@ -6,6 +6,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.mediarouter.app.MediaRouteButton
+import com.google.android.gms.cast.framework.CastButtonFactory
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
@@ -93,7 +97,21 @@ fun DashboardScreen(
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = MaterialTheme.colorScheme.primary,
                         titleContentColor = MaterialTheme.colorScheme.onPrimary
-                    )
+                    ),
+                    actions = {
+                        AndroidView(
+                            factory = { ctx ->
+                                val themedContext = android.view.ContextThemeWrapper(
+                                    ctx,
+                                    androidx.mediarouter.R.style.Theme_MediaRouter
+                                )
+                                MediaRouteButton(themedContext).apply {
+                                    CastButtonFactory.setUpMediaRouteButton(themedContext, this)
+                                }
+                            },
+                            modifier = Modifier.size(48.dp)
+                        )
+                    }
                 )
             },
             floatingActionButton = {
