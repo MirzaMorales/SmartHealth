@@ -9,6 +9,9 @@ interface LecturaFCDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertar(lectura: LecturaFC)
 
+    @Query("SELECT * FROM lecturas_fc WHERE id = :id LIMIT 1")
+    suspend fun obtenerPorId(id: Int): LecturaFC?
+
     // Flow: actualización reactiva cuando hay nuevos datos
     @Query(
         """

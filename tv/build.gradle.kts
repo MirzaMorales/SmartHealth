@@ -45,6 +45,7 @@ dependencies {
     
     // Compartir Room + Repository con módulo shared
     implementation(project(":shared"))
+    implementation("androidx.room:room-runtime:2.8.0")
     
     // ViewModel + Coroutines
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")

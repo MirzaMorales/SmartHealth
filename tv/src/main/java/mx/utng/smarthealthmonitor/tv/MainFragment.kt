@@ -29,6 +29,16 @@ class MainFragment : BrowseSupportFragment() {
 
         cargarFilas()
         observarDatos()
+
+        setOnItemViewClickedListener { itemViewHolder, item, rowViewHolder, row ->
+            if (item is LecturaFC) {
+                val detail = DetailFragment.newInstance(item.id)
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.main_browse_fragment, detail)
+                    .addToBackStack(null)  // Back regresa al BrowseFragment
+                    .commit()
+            }
+        }
     }
 
     private fun observarDatos() {
