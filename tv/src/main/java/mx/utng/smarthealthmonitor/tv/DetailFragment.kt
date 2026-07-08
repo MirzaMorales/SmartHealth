@@ -14,10 +14,13 @@ import mx.utng.mnml.smarthealthmonitor.data.db.SmartHealthDB
 class DetailFragment : DetailsSupportFragment(),
     OnActionClickedListener {
 
+    private var lectura: LecturaFC? = null
+
     companion object {
         const val ARG_LECTURA_ID = "lectura_id"
         const val ACTION_PLAY    = 1L
         const val ACTION_BACK    = 2L
+        const val TEST_AUDIO_URL = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
 
         fun newInstance(lecturaId: Int): DetailFragment {
             return DetailFragment().apply {
@@ -34,9 +37,10 @@ class DetailFragment : DetailsSupportFragment(),
 
         viewLifecycleOwner.lifecycleScope.launch {
             // Buscar la lectura en Room por ID
-            val lectura = SmartHealthDB.getDatabase(requireContext())
+            val dbLectura = SmartHealthDB.getDatabase(requireContext())
                 .lecturaDao().obtenerPorId(id)
-            lectura?.let { construirDetalle(it) }
+            lectura = dbLectura
+            dbLectura?.let { construirDetalle(it) }
         }
     }
 
@@ -71,8 +75,15 @@ class DetailFragment : DetailsSupportFragment(),
     override fun onActionClicked(action: Action) {
         when (action.id) {
             ACTION_PLAY -> {
-                // TODO Ej.02: navegar al PlaybackFragment
-                Toast.makeText(context, "Reproducir", Toast.LENGTH_SHORT).show()
+                val currentLectura = lectura ?: return
+                val playback = PlaybackFragment.newInstance(
+                    url   = TEST_AUDIO_URL,
+                    title = "Alerta FC ${currentLectura.valorBpm} bpm"
+                )
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.main_browse_fragment, playback)
+                    .addToBackStack(null)
+                    .commit()
             }
             ACTION_BACK -> {
                 @Suppress("DEPRECATION")
