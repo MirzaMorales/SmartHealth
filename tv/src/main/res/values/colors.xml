@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Paleta de colores de SmartHealth Monitor -->
+    <color name="sh_primary">#FF99AD7A</color>
+    <color name="sh_amber">#FF0D7377</color>
+    <color name="sh_dark">#FF1C1B1F</color>
+</resources>

@@ -123,7 +123,8 @@ fun DashboardScreen(
                         valor = "$fc",
                         unidad = "bpm",
                         label = "Frecuencia cardíaca",
-                        colorValor = MaterialTheme.colorScheme.error
+                        colorValor = MaterialTheme.colorScheme.error,
+                        colorUnidad = MaterialTheme.colorScheme.error.copy(alpha = 0.7f) // Ejemplo: rojo suave
                     )
                 }
 

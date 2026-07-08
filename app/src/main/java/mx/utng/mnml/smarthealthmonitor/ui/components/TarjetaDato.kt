@@ -17,6 +17,7 @@ fun TarjetaDato(
     unidad: String,               // "bpm" o "pasos"
     label: String,                // "Frecuencia cardíaca"
     colorValor: Color,            // MaterialTheme.colorScheme.error
+    colorUnidad: Color = MaterialTheme.colorScheme.onSurfaceVariant, // Nuevo parámetro
     modifier: Modifier = Modifier // ← siempre en Composables reutilizables
 ) {
     ElevatedCard(
@@ -47,7 +48,7 @@ fun TarjetaDato(
                 Text(
                     text = unidad,
                     style = MaterialTheme.typography.titleSmall,
-                    color = colorValor,
+                    color = colorUnidad, // Usamos el nuevo color
                     modifier = Modifier.padding(bottom = 4.dp)
                 )
             }

@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "mx.utng.mnml.shared"
-    compileSdk = 36
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 24 // Compatible with both app (24) and wear (30)

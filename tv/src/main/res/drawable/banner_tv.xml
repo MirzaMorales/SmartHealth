@@ -1,0 +1,15 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="320dp"
+    android:height="180dp"
+    android:viewportWidth="320"
+    android:viewportHeight="180">
+    <!-- Fondo oscuro -->
+    <path
+        android:fillColor="#FF1C1B1F"
+        android:pathData="M0,0 h320 v180 h-320 z" />
+    
+    <!-- Elemento decorativo del logo (Cruz de salud estilizada) -->
+    <path
+        android:fillColor="#FF99AD7A"
+        android:pathData="M145,90 h30 v10 h-30 z M155,80 h10 v30 h-10 z" />
+</vector>
