@@ -11,8 +11,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import mx.utng.mnml.smarthealthmonitor.data.repository.SmartHealthRepository
+import mx.utng.mnml.wear.mqtt.MqttWearPublisher
 import mx.utng.mnml.wear.presentation.theme.SmartHealthWearTheme
 
 class WearMainActivity : ComponentActivity(), SensorEventListener {
@@ -31,20 +34,24 @@ class WearMainActivity : ComponentActivity(), SensorEventListener {
 
         wearDataSender = WearDataSender(applicationContext)
 
+        // Conectar a MQTT en hilo de fondo
+        lifecycleScope.launch(Dispatchers.IO) {
+            MqttWearPublisher.connect()
+        }
+
         sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
         heartRateSensor = sensorManager.getDefaultSensor(Sensor.TYPE_HEART_RATE)
 
         val permissions = arrayOf(
             android.Manifest.permission.BODY_SENSORS,
-            android.Manifest.permission.ACTIVITY_RECOGNITION,
-            "android.permission.health.READ_HEART_RATE"
+            android.Manifest.permission.ACTIVITY_RECOGNITION
         )
 
-        val allGranted = permissions.all {
-            androidx.core.content.ContextCompat.checkSelfPermission(this, it) == android.content.pm.PackageManager.PERMISSION_GRANTED
-        }
+        val sensorsGranted = androidx.core.content.ContextCompat.checkSelfPermission(
+            this, android.Manifest.permission.BODY_SENSORS
+        ) == android.content.pm.PackageManager.PERMISSION_GRANTED
 
-        if (allGranted) {
+        if (sensorsGranted) {
             registerHealthServices()
         } else {
             permissionLauncher.launch(permissions)
@@ -61,9 +68,11 @@ class WearMainActivity : ComponentActivity(), SensorEventListener {
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestMultiplePermissions()
     ) { result ->
-        val allGranted = result.values.all { it }
-        if (allGranted) {
+        val sensorsGranted = result[android.Manifest.permission.BODY_SENSORS] == true
+        if (sensorsGranted) {
             registerHealthServices()
+        } else {
+            Log.e("WearMainActivity", "Permiso de sensores corporales denegado")
         }
     }
 
@@ -97,6 +106,16 @@ class WearMainActivity : ComponentActivity(), SensorEventListener {
                 SmartHealthRepository.actualizarFC(bpm)
                 // Enviar el dato en tiempo real a la app del celular
                 wearDataSender.enviarFC(bpm)
+
+                // Publicar a MQTT
+                val estado = when {
+                    bpm < 60 -> "FC Baja"
+                    bpm > 100 -> "FC Alta"
+                    else -> "Normal"
+                }
+                withContext(Dispatchers.IO) {
+                    MqttWearPublisher.publishFC(bpm, estado)
+                }
             }
         }
     }

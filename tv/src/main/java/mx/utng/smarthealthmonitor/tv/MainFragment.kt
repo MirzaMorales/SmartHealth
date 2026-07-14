@@ -15,6 +15,7 @@ class MainFragment : BrowseSupportFragment() {
 
     private val viewModel: TvViewModel by viewModels()
     private lateinit var histAdapter: ArrayObjectAdapter
+    private lateinit var rowsAdapter: ArrayObjectAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -51,10 +52,27 @@ class MainFragment : BrowseSupportFragment() {
                 }
             }
         }
+
+        // Observar FC actual y actualizar el encabezado de la primera fila
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.fc.collect { fcVal ->
+                    if (fcVal > 0) {
+                        val newHeader = HeaderItem(0, "Historial FC - Último: $fcVal bpm")
+                        val newRow = ListRow(newHeader, histAdapter)
+                        if (rowsAdapter.size() > 0) {
+                            rowsAdapter.replace(0, newRow)
+                        } else {
+                            rowsAdapter.add(newRow)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private fun cargarFilas() {
-        val rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
+        rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
 
         // Fila historial con adapter reactivo
         histAdapter = ArrayObjectAdapter(FCCardPresenter())
