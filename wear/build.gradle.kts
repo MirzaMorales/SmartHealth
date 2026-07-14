@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp") version "2.2.10-2.0.2"
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -30,7 +31,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    useLibrary("wear-sdk")
+    // useLibrary("wear-sdk")
     buildFeatures {
         compose = true
     }
@@ -63,6 +64,7 @@ dependencies {
 
     // Compose for Wear OS
     implementation("androidx.wear.compose:compose-material:1.3.1")
+    // Use standard foundation rather than duplicated material if needed, but let's keep original dependencies
     implementation("androidx.wear.compose:compose-foundation:1.3.1")
     implementation("androidx.wear.compose:compose-navigation:1.3.1")
 
@@ -77,4 +79,10 @@ dependencies {
     implementation("androidx.wear.watchface:watchface:1.2.1")
     implementation("androidx.wear.watchface:watchface-complications-rendering:1.2.1")
     implementation("androidx.wear.watchface:watchface-style:1.2.1")
+
+    // Eclipse Paho MQTT para Android
+    implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
+    implementation("org.eclipse.paho:org.eclipse.paho.android.service:1.1.1")
+    // Kotlinx Serialization para JSON
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 }

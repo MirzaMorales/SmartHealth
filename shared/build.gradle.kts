@@ -1,6 +1,7 @@
 plugins {
     id("com.android.library")
     id("com.google.devtools.ksp") version "2.2.10-2.0.2"
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -26,4 +27,7 @@ dependencies {
     implementation("androidx.room:room-runtime:$roomVersion")
     implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
+
+    // Kotlinx Serialization para JSON
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
 }
