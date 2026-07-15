@@ -6,6 +6,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import mx.utng.mnml.smarthealthmonitor.data.repository.SmartHealthRepository
+import mx.utng.mnml.smarthealthmonitor.data.sync.NeonSyncWorker
 import mx.utng.mnml.smarthealthmonitor.mqtt.MqttAppService
 
 class SmartHealthApp : Application() {
@@ -17,6 +18,9 @@ class SmartHealthApp : Application() {
 
         // Inicializar Room al abrir la aplicación
         SmartHealthRepository.init(this)
+
+        // Programar sync periódico con Neon
+        NeonSyncWorker.schedule(this)
 
         // Inicializar MQTT en segundo plano
         mqttService = MqttAppService(this)

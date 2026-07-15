@@ -66,6 +66,9 @@ dependencies {
     // Necesario para generar el código del DAO
     ksp("androidx.room:room-compiler:$roomVersion")
 
+    // WorkManager para sync periódico en background
+    implementation("androidx.work:work-runtime-ktx:2.9.1")
+
     // Dependencia del modulo compartido
     implementation(project(":shared"))
 
