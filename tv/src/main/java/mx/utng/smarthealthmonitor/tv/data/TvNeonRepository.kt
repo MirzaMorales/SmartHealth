@@ -12,7 +12,6 @@ class TvNeonRepository {
     suspend fun obtenerHistorialCompleto(limite: Int = 50): List<LecturaFcDto> =
         withContext(Dispatchers.IO) {
             NeonClient.api.executeQuery(
-                auth = NeonClient.AUTH_HEADER,
                 connStr = NeonClient.CONN_STRING,
                 request = NeonRequest(
                     query = """
@@ -30,7 +29,6 @@ class TvNeonRepository {
     suspend fun obtenerEstadisticas(): List<LecturaFcDto> =
         withContext(Dispatchers.IO) {
             NeonClient.api.executeQuery(
-                auth = NeonClient.AUTH_HEADER,
                 connStr = NeonClient.CONN_STRING,
                 request = NeonRequest(
                     query = """
@@ -51,7 +49,6 @@ class TvNeonRepository {
     suspend fun obtenerAlertasRango(): List<LecturaFcDto> =
         withContext(Dispatchers.IO) {
             NeonClient.api.executeQuery(
-                auth = NeonClient.AUTH_HEADER,
                 connStr = NeonClient.CONN_STRING,
                 request = NeonRequest(
                     query = """
@@ -69,7 +66,6 @@ class TvNeonRepository {
     suspend fun obtenerPromedioPorHora(): List<LecturaFcDto> =
         withContext(Dispatchers.IO) {
             NeonClient.api.executeQuery(
-                auth = NeonClient.AUTH_HEADER,
                 connStr = NeonClient.CONN_STRING,
                 request = NeonRequest(
                     query = """
@@ -90,7 +86,6 @@ class TvNeonRepository {
     suspend fun obtenerMasRecientePorDispositivo(): List<LecturaFcDto> =
         withContext(Dispatchers.IO) {
             NeonClient.api.executeQuery(
-                auth = NeonClient.AUTH_HEADER,
                 connStr = NeonClient.CONN_STRING,
                 request = NeonRequest(
                     query = """

@@ -35,7 +35,6 @@ class SyncRepository(
     private suspend fun sincronizarHaciaNeon(lectura: LecturaFC) =
         withContext(Dispatchers.IO) {
             NeonClient.api.executeQuery(
-                auth = NeonClient.AUTH_HEADER,
                 connStr = NeonClient.CONN_STRING,
                 request = NeonRequest(
                     query = """
@@ -54,7 +53,6 @@ class SyncRepository(
     suspend fun sincronizarDesdeNeon(limite: Int = 50) = withContext(Dispatchers.IO) {
         try {
             val response = NeonClient.api.executeQuery(
-                auth = NeonClient.AUTH_HEADER,
                 connStr = NeonClient.CONN_STRING,
                 request = NeonRequest(
                     query = """
