@@ -12,16 +12,17 @@ class DetailsDescriptionPresenter : AbstractDetailsDescriptionPresenter() {
         val lectura = item as LecturaFC
 
         // Título: valor de FC
-        viewHolder.title.text = "${lectura.valorBpm} bpm"
+        viewHolder.title.text = "${lectura.bpm} bpm"
 
         // Subtítulo: estado de salud
         viewHolder.subtitle.text = if (lectura.esNormal)
-            "✓ Frecuencia normal"
+            "✓ Frecuencia normal (${lectura.estado})"
         else
-            "⚠ Fuera de rango — consulta al médico"
+            "⚠ ${lectura.estado} — consulta al médico"
 
-        // Cuerpo: hora y timestamp completo
+        // Cuerpo: hora, dispositivo e ID
         viewHolder.body.text =
+            "Dispositivo: ${lectura.dispositivo.uppercase()}\n" +
             "Registrado a las ${lectura.hora}\n" +
             "ID de lectura: ${lectura.id}"
     }

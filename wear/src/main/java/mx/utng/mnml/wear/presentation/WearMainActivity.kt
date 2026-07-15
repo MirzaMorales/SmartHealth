@@ -24,6 +24,7 @@ class WearMainActivity : ComponentActivity(), SensorEventListener {
     private var heartRateSensor: Sensor? = null
     private lateinit var wearDataSender: WearDataSender
     private var isRegistered = false
+    private val neonRepo = mx.utng.mnml.wear.data.WearNeonRepository()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,6 +116,12 @@ class WearMainActivity : ComponentActivity(), SensorEventListener {
                 }
                 withContext(Dispatchers.IO) {
                     MqttWearPublisher.publishFC(bpm, estado)
+                }
+
+                // Publicar a Neon en hilo IO
+                launch(Dispatchers.IO) {
+                    runCatching { neonRepo.publicarLectura(bpm, estado) }
+                        .onFailure { Log.w("WEAR", "Sin red para Neon: ${it.message}") }
                 }
             }
         }

@@ -14,6 +14,7 @@ import mx.utng.mnml.smarthealthmonitor.data.db.LecturaFC
 class MainFragment : BrowseSupportFragment() {
 
     private val viewModel: TvViewModel by viewModels()
+    private lateinit var statAdapter: ArrayObjectAdapter
     private lateinit var histAdapter: ArrayObjectAdapter
     private lateinit var rowsAdapter: ArrayObjectAdapter
 
@@ -33,7 +34,13 @@ class MainFragment : BrowseSupportFragment() {
 
         setOnItemViewClickedListener { itemViewHolder, item, rowViewHolder, row ->
             if (item is LecturaFC) {
-                val detail = DetailFragment.newInstance(item.id)
+                val detail = DetailFragment.newInstance(
+                    lecturaId = item.id,
+                    bpm = item.bpm,
+                    estado = item.estado,
+                    dispositivo = item.dispositivo,
+                    hora = item.hora
+                )
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.main_browse_fragment, detail)
                     .addToBackStack(null)  // Back regresa al BrowseFragment
@@ -43,28 +50,33 @@ class MainFragment : BrowseSupportFragment() {
     }
 
     private fun observarDatos() {
-        // Observar historial de Room y actualizar la fila
+        // Observar estado del ViewModel (datos de Neon)
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.historial.collect { lecturas ->
-                    histAdapter.clear()
-                    lecturas.forEach { histAdapter.add(it) }
+                viewModel.state.collect { uiState ->
+                    if (!uiState.isLoading && uiState.error == null) {
+                        statAdapter.clear()
+                        uiState.estadisticas.forEach { statAdapter.add(it) }
+
+                        histAdapter.clear()
+                        uiState.lecturas.forEach { histAdapter.add(it) }
+                    } else if (uiState.error != null) {
+                        android.widget.Toast.makeText(
+                            requireContext(),
+                            "Error al conectar con Neon: ${uiState.error}",
+                            android.widget.Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
             }
         }
 
-        // Observar FC actual y actualizar el encabezado de la primera fila
+        // Observar FC actual y actualizar el encabezado si se desea, o refrescar
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.fc.collect { fcVal ->
                     if (fcVal > 0) {
-                        val newHeader = HeaderItem(0, "Historial FC - Último: $fcVal bpm")
-                        val newRow = ListRow(newHeader, histAdapter)
-                        if (rowsAdapter.size() > 0) {
-                            rowsAdapter.replace(0, newRow)
-                        } else {
-                            rowsAdapter.add(newRow)
-                        }
+                        viewModel.cargarDatos()
                     }
                 }
             }
@@ -74,9 +86,13 @@ class MainFragment : BrowseSupportFragment() {
     private fun cargarFilas() {
         rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
 
-        // Fila historial con adapter reactivo
+        // Fila 1: Estado Actual
+        statAdapter = ArrayObjectAdapter(FCCardPresenter())
+        rowsAdapter.add(ListRow(HeaderItem(0, "Estado Actual (3 dispositivos)"), statAdapter))
+
+        // Fila 2: Historial Completo
         histAdapter = ArrayObjectAdapter(FCCardPresenter())
-        rowsAdapter.add(ListRow(HeaderItem("Historial FC"), histAdapter))
+        rowsAdapter.add(ListRow(HeaderItem(1, "Historial Completo"), histAdapter))
 
         this.adapter = rowsAdapter
     }

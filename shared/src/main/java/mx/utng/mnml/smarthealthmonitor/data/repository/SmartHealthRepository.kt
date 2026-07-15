@@ -7,7 +7,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 
-// Revisa que la ruta de estos imports coincida con la ubicación de tus archivos de BD
 import mx.utng.mnml.smarthealthmonitor.data.db.LecturaFC
 import mx.utng.mnml.smarthealthmonitor.data.db.LecturaFCDao
 import mx.utng.mnml.smarthealthmonitor.data.db.SmartHealthDB
@@ -28,18 +27,21 @@ object SmartHealthRepository {
 
     // Variable para manejar la base de datos local
     private var dao: LecturaFCDao? = null
+    private var syncRepo: SyncRepository? = null
 
-    // Inicializa la base de datos
+    // Inicializa la base de datos y el SyncRepository
     fun init(context: Context) {
-        dao = SmartHealthDB.getDatabase(context).lecturaDao()
+        val lecturaDao = SmartHealthDB.getDatabase(context).lecturaDao()
+        dao = lecturaDao
+        syncRepo = SyncRepository(lecturaDao)
     }
 
     // Actualiza la FC en la UI y la guarda en Room al mismo tiempo
     suspend fun actualizarFC(bpm: Int) {
         _fcFlow.value = bpm
 
-        // Persistir en Room automáticamente
-        dao?.insertar(LecturaFC(valorBpm = bpm))
+        // Persistir en Room y sincronizar usando SyncRepository
+        syncRepo?.insertarLectura(LecturaFC(bpm = bpm, dispositivo = "app"))
     }
 
     // Se mantiene tu función original para los pasos
@@ -49,6 +51,6 @@ object SmartHealthRepository {
 
     // Flow reactivo del historial desde Room
     fun obtenerHistorial(): Flow<List<LecturaFC>> {
-        return dao?.obtenerUltimas() ?: emptyFlow()
+        return syncRepo?.observarHistorial() ?: emptyFlow()
     }
 }

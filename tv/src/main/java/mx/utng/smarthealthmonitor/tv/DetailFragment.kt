@@ -22,10 +22,20 @@ class DetailFragment : DetailsSupportFragment(),
         const val ACTION_BACK    = 2L
         const val TEST_AUDIO_URL = "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
 
-        fun newInstance(lecturaId: Int): DetailFragment {
+        fun newInstance(
+            lecturaId: Int,
+            bpm: Int,
+            estado: String,
+            dispositivo: String,
+            hora: String
+        ): DetailFragment {
             return DetailFragment().apply {
                 arguments = Bundle().also {
                     it.putInt(ARG_LECTURA_ID, lecturaId)
+                    it.putInt("bpm", bpm)
+                    it.putString("estado", estado)
+                    it.putString("dispositivo", dispositivo)
+                    it.putString("hora", hora)
                 }
             }
         }
@@ -34,14 +44,21 @@ class DetailFragment : DetailsSupportFragment(),
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val id = arguments?.getInt(ARG_LECTURA_ID) ?: return
+        val bpm = arguments?.getInt("bpm") ?: 0
+        val estado = arguments?.getString("estado") ?: "Normal"
+        val dispositivo = arguments?.getString("dispositivo") ?: "app"
+        val hora = arguments?.getString("hora") ?: ""
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            // Buscar la lectura en Room por ID
-            val dbLectura = SmartHealthDB.getDatabase(requireContext())
-                .lecturaDao().obtenerPorId(id)
-            lectura = dbLectura
-            dbLectura?.let { construirDetalle(it) }
-        }
+        val detailLectura = LecturaFC(
+            id = id,
+            bpm = bpm,
+            estado = estado,
+            dispositivo = dispositivo,
+            hora = hora,
+            sincronizado = true
+        )
+        lectura = detailLectura
+        construirDetalle(detailLectura)
     }
 
     private fun construirDetalle(lectura: LecturaFC) {
@@ -78,7 +95,7 @@ class DetailFragment : DetailsSupportFragment(),
                 val currentLectura = lectura ?: return
                 val playback = PlaybackFragment.newInstance(
                     url   = TEST_AUDIO_URL,
-                    title = "Alerta FC ${currentLectura.valorBpm} bpm"
+                    title = "Alerta FC ${currentLectura.bpm} bpm"
                 )
                 parentFragmentManager.beginTransaction()
                     .replace(R.id.main_browse_fragment, playback)

@@ -23,8 +23,8 @@ class FCCardPresenter : Presenter() {
         val card    = viewHolder.view as ImageCardView
         val lectura = item as LecturaFC
  
-        card.titleText   = "${lectura.valorBpm} bpm"
-        card.contentText = lectura.hora
+        card.titleText   = "${lectura.bpm} bpm"
+        card.contentText = "${lectura.dispositivo.uppercase()} - ${lectura.hora}"
  
         // Color de fondo según si FC es normal
         val bgColor = if (lectura.esNormal) {

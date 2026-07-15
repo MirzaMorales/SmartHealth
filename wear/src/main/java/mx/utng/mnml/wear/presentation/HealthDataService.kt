@@ -14,6 +14,7 @@ class HealthDataService : PassiveListenerService() {
 
     private val scope = CoroutineScope(Dispatchers.IO + SupervisorJob())
     private lateinit var wearDataSender: WearDataSender
+    private val neonRepo = mx.utng.mnml.wear.data.WearNeonRepository()
 
     override fun onCreate() {
         super.onCreate()
@@ -43,6 +44,12 @@ class HealthDataService : PassiveListenerService() {
                         else -> "Normal"
                     }
                     MqttWearPublisher.publishFC(bpm, estado)
+
+                    // Publicar a Neon
+                    launch(Dispatchers.IO) {
+                        runCatching { neonRepo.publicarLectura(bpm, estado) }
+                            .onFailure { android.util.Log.w("WEAR", "Sin red para Neon: ${it.message}") }
+                    }
                 }
             }
         }

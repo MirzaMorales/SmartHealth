@@ -23,7 +23,7 @@ fun WearFilaHistorial(
     Chip(
         label = {
             Text(
-                text = "${lectura.valorBpm} bpm",
+                text = "${lectura.bpm} bpm",
                 color = color
             )
         },
